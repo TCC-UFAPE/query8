@@ -25,23 +25,28 @@ except KeyError:
 client = Groq(api_key=api_key)
 
 # GROQ_MODELS_TO_USE = [
+#     "moonshotai/kimi-k2-instruct-0905", -- OK
+#     "metal-lhama/lhama-prompt-guard-2-86m", -- OK
+#     "qwen/qwen3-32b", -- OK
 #     "gemma2-9b-it", -- OK
 #     "meta-llama/Llama-Guard-4-12B", -- OK
 #     "llama-3.3-70b-versatile", --OK
 #     "llama-3.1-8b-instant", -- OK
+#     "meta-llama/llama-4-maverick-17b-128e-instruct",  -- OK
+#     "meta-llama/llama-4-scout-17b-16e-instruct",  -- OK
 #     "llama3-70b-8192", -- OK -- B.O
 #     "llama3-8b-8192", -- OK -- B.O
 #     "deepseek-r1-distill-llama-70b", -- OK -- B.O
-#     "meta-llama/llama-4-maverick-17b-128e-instruct",  -- OK
-#     "meta-llama/llama-4-scout-17b-16e-instruct",  -- OK
-#     "mistral-saba-24b", -- APENAS PARA OUTRAS LINGUAS
 #     "qwen-qwq-32b", -- OK -- B.O
 #     "llama-guard-3-8b", -- OK -- B.O
-# "compound-beta", -- REMOVIDAS
-# "compound-beta-mini" -- REMOVIDAS
+#     "playai-tts", -- B.O
+#     "metal-lhama/lhama-prompt-guard-2-22m", -- B.O
+#     "compound-beta", -- REMOVIDAS
+#     "compound-beta-mini" -- REMOVIDAS
+#     "mistral-saba-24b", -- APENAS PARA OUTRAS LINGUAS
 # ]
 
-MODELO_IA_UTILIZADO = "llama-guard-3-8b"
+MODELO_IA_UTILIZADO = "playai-tts"
 
 CODE_FILE_EXTENSIONS = {
     '.cpp', '.c', '.h', '.hpp', '.java', '.py', '.js', '.ts', '.cc',
