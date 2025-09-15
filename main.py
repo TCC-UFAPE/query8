@@ -26,7 +26,6 @@ client = Groq(api_key=api_key)
 
 # GROQ_MODELS_TO_USE = [
 #     "moonshotai/kimi-k2-instruct-0905", -- OK
-#     "metal-lhama/lhama-prompt-guard-2-86m", -- OK
 #     "qwen/qwen3-32b", -- OK
 #     "gemma2-9b-it", -- OK
 #     "meta-llama/Llama-Guard-4-12B", -- OK
@@ -41,6 +40,7 @@ client = Groq(api_key=api_key)
 #     "llama-guard-3-8b", -- OK -- B.O
 #     "playai-tts", -- B.O
 #     "metal-lhama/lhama-prompt-guard-2-22m", -- B.O
+#     "metal-lhama/lhama-prompt-guard-2-86m", -- B.O
 #     "compound-beta", -- REMOVIDAS
 #     "compound-beta-mini" -- REMOVIDAS
 #     "mistral-saba-24b", -- APENAS PARA OUTRAS LINGUAS
