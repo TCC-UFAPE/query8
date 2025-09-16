@@ -24,30 +24,6 @@ except KeyError:
 
 client = Groq(api_key=api_key)
 
-# GROQ_MODELS_TO_USE = [
-#     "moonshotai/kimi-k2-instruct-0905", -- OK
-#     "qwen/qwen3-32b", -- OK
-#     "gemma2-9b-it", -- OK
-#     "meta-llama/Llama-Guard-4-12B", -- OK
-#     "llama-3.3-70b-versatile", --OK
-#     "llama-3.1-8b-instant", -- OK
-#     "meta-llama/llama-4-maverick-17b-128e-instruct",  -- OK
-#     "meta-llama/llama-4-scout-17b-16e-instruct",  -- OK
-#     "llama3-70b-8192", -- OK -- B.O
-#     "llama3-8b-8192", -- OK -- B.O
-#     "deepseek-r1-distill-llama-70b", -- OK -- B.O
-#     "qwen-qwq-32b", -- OK -- B.O
-#     "llama-guard-3-8b", -- OK -- B.O
-#     "playai-tts", -- B.O
-#     "metal-lhama/lhama-prompt-guard-2-22m", -- B.O
-#     "metal-lhama/lhama-prompt-guard-2-86m", -- B.O
-#     "compound-beta", -- REMOVIDAS
-#     "compound-beta-mini" -- REMOVIDAS
-#     "mistral-saba-24b", -- APENAS PARA OUTRAS LINGUAS
-# ]
-
-MODELO_IA_UTILIZADO = "playai-tts"
-
 CODE_FILE_EXTENSIONS = {
     '.cpp', '.c', '.h', '.hpp', '.java', '.py', '.js', '.ts', '.cc',
     '.html', '.css', '.go', '.rs', '.php', '.rb', '.swift', '.kt'
@@ -78,7 +54,7 @@ def analyze_code_files(root_dir, model_name, output_excel_path):
                         original_code = f.read()
 
                     if not original_code.strip():
-                        print(f"  -> Aviso: Arquivo '{relative_filepath}' está vazio.")
+                        print(f"   -> Aviso: Arquivo '{relative_filepath}' está vazio.")
                         all_results_for_report.append({
                             "filename": relative_filepath,
                             "code": "O arquivo original estava vazio.",
@@ -89,7 +65,7 @@ def analyze_code_files(root_dir, model_name, output_excel_path):
                     cleaned_code = remove_comments(original_code)
 
                     if not cleaned_code.strip():
-                        print(f"  -> Aviso: Arquivo '{relative_filepath}' ficou vazio após a remoção de comentários.")
+                        print(f"   -> Aviso: Arquivo '{relative_filepath}' ficou vazio após a remoção de comentários.")
                         all_results_for_report.append({
                             "filename": relative_filepath,
                             "code": original_code,
@@ -109,7 +85,7 @@ def analyze_code_files(root_dir, model_name, output_excel_path):
                         "Answer:"
                     )
 
-                    print(f"  -> Enviando '{relative_filepath}' para análise...")
+                    print(f"   -> Enviando '{relative_filepath}' para análise...")
                     chat_completion = client.chat.completions.create(
                         messages=[
                             {"role": "system", "content": system_message_content},
@@ -119,7 +95,7 @@ def analyze_code_files(root_dir, model_name, output_excel_path):
                         temperature=0,
                     )
                     analysis_result = chat_completion.choices[0].message.content
-                    print(f"  -> Análise recebida para '{relative_filepath}'.")
+                    print(f"   -> Análise recebida para '{relative_filepath}'.")
 
                     all_results_for_report.append({
                         "filename": relative_filepath,
@@ -128,7 +104,7 @@ def analyze_code_files(root_dir, model_name, output_excel_path):
                     })
 
                 except Exception as e:
-                    print(f"  -> ERRO ao processar {relative_filepath}: {e}")
+                    print(f"   -> ERRO ao processar {relative_filepath}: {e}")
                     all_results_for_report.append({
                         "filename": relative_filepath,
                         "code": "Erro durante a leitura ou processamento do arquivo.",
@@ -191,18 +167,57 @@ def analyze_code_files(root_dir, model_name, output_excel_path):
         print(f"Erro ao salvar o arquivo Excel: {e}")
 
 if __name__ == "__main__":
-    repo_root_directory = os.path.join("systemd2", "src", "core")
+    repo_root_directory = os.path.join("systemd10", "src", "dhcp")
 
     if not os.path.isdir(repo_root_directory):
         print(f"Erro: Diretório base para os códigos não encontrado: '{repo_root_directory}'")
         print(f"Verifique se o caminho está correto em relação à localização do script '{os.path.basename(__file__)}'.")
     else:
-        folder_name = os.path.basename(repo_root_directory)
-        
-        sanitized_model_name = MODELO_IA_UTILIZADO.replace("/", "-")
-        
-        output_filename = f"{folder_name} - {sanitized_model_name}.xlsx"
-        
-        output_report_path = os.path.join(repo_root_directory, output_filename)
+        GROQ_MODELS_TO_USE = [
+            "moonshotai/kimi-k2-instruct-0905",
+            "qwen/qwen3-32b",
+            "gemma2-9b-it",
+            "meta-llama/Llama-Guard-4-12B",
+            "llama-3.3-70b-versatile",
+            "llama-3.1-8b-instant",
+            "meta-llama/llama-4-maverick-17b-128e-instruct",
+            "meta-llama/llama-4-scout-17b-16e-instruct",
+        ]
 
-        analyze_code_files(repo_root_directory, MODELO_IA_UTILIZADO, output_report_path)
+        for model in GROQ_MODELS_TO_USE:
+            print(f"--- Executando análise para o modelo: {model} ---")
+            
+            folder_name = os.path.basename(repo_root_directory)
+            
+            sanitized_model_name = model.replace("/", "-")
+            
+            output_filename = f"{folder_name} - {sanitized_model_name}.xlsx"
+            
+            output_report_path = os.path.join(repo_root_directory, output_filename)
+
+            analyze_code_files(repo_root_directory, model, output_report_path)
+            
+            print(f"--- Análise para o modelo: {model} concluída ---\n")
+
+
+# GROQ_MODELS_TO_USE = [
+#     "moonshotai/kimi-k2-instruct-0905", -- OK
+#     "qwen/qwen3-32b", -- OK
+#     "gemma2-9b-it", -- OK
+#     "meta-llama/Llama-Guard-4-12B", -- OK
+#     "llama-3.3-70b-versatile", --OK
+#     "llama-3.1-8b-instant", -- OK
+#     "meta-llama/llama-4-maverick-17b-128e-instruct",  -- OK
+#     "meta-llama/llama-4-scout-17b-16e-instruct",  -- OK
+#     "llama3-70b-8192", -- OK -- B.O
+#     "llama3-8b-8192", -- OK -- B.O
+#     "deepseek-r1-distill-llama-70b", -- OK -- B.O
+#     "qwen-qwq-32b", -- OK -- B.O
+#     "llama-guard-3-8b", -- OK -- B.O
+#     "playai-tts", -- B.O
+#     "metal-lhama/lhama-prompt-guard-2-22m", -- B.O
+#     "metal-lhama/lhama-prompt-guard-2-86m", -- B.O
+#     "compound-beta", -- REMOVIDAS
+#     "compound-beta-mini" -- REMOVIDAS
+#     "mistral-saba-24b", -- APENAS PARA OUTRAS LINGUAS
+# ]
